@@ -1,66 +1,56 @@
-# Verio — Secure Financial Extraction & Verification
+# LeadDesk Mini
 
-> A workspace-isolated financial transaction extractor built with Next.js 15, Hono, Better Auth, Neon PostgreSQL, and Prisma.
-
-![Next.js](https://img.shields.io/badge/Next.js-15.5-black?style=flat-square&logo=next.js)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?style=flat-square&logo=typescript)
-![PostgreSQL](https://img.shields.io/badge/Neon-PostgreSQL-green?style=flat-square&logo=postgresql)
-![Better Auth](https://img.shields.io/badge/Better--Auth-Latest-purple?style=flat-square)
-![Vercel](https://img.shields.io/badge/Deployed-Vercel-black?style=flat-square&logo=vercel)
+> **The Agency CRM Built for Digital Heroes**  
+> Capture, organize, and convert every website inquiry from one beautifully crafted dashboard.
 
 ---
 
-## Live Deployment
+## ✨ Overview
 
-🔗 **Production:** https://verio-secure-financial-extraction-v.vercel.app
+LeadDesk Mini is a purpose-built lead management platform designed exclusively for creative and development agencies. It replaces scattered inboxes and spreadsheets with a centralized, real-time pipeline — so no inquiry ever slips through the cracks.
 
----
+### Key Highlights
 
-## Approach to Better Auth Integration
-
-Better Auth is configured with the `prismaAdapter` and PostgreSQL to handle all session state, password hashing, and OAuth token management server-side. Multi-tenancy is enforced through a custom `Organization` + `Membership` model — every API route resolves the authenticated user's `organizationId` via `auth.api.getSession()` and applies it as a mandatory Prisma filter, making it architecturally impossible to read another organization's data even with a valid session token. The `trustedOrigins` and `baseURL` are dynamically resolved from Vercel's `VERCEL_PROJECT_PRODUCTION_URL` system variable, ensuring OAuth state cookies always match the serving domain in production.
-
----
-
-## Features
-
-- **Transaction Parsing** — Paste raw bank SMS/statements → get structured ledger entries with confidence score
-- **Workspace Isolation** — All data strictly scoped per organisation (IDOR-safe at query level)
-- **Multi-Member Workspaces** — Invite members via email with pending invite tracking
-- **Google OAuth** — Sign in with Google with automatic account linking
-- **Forgot / Reset Password** — Email-based password reset via SMTP
-- **Activity Log** — Full audit trail of all workspace events
-- **Workspace Settings** — Rename workspace, manage members and roles
-- **Role-Based Access** — Owner and Member roles with enforced permissions
-- **Cursor-Based Pagination** — Scalable transaction listing with `nextCursor`
+- ⚡ **Instant Lead Capture** — REST API + embeddable forms sync inquiries in real time
+- 📊 **Dual-View Pipeline** — Toggle between Table stream and Kanban board
+- 📧 **Automated Email Alerts** — Team-wide notifications on every new lead
+- 📈 **Conversion Analytics** — Track monthly growth, sources, budgets, and conversion rates
+- 👥 **Agency Team Workspaces** — Isolated multi-member workspaces with role-based access
+- 📥 **One-Click CSV Export** — Export full lead data instantly
+- 🔍 **Global Search (⌘K)** — Search leads, members, and pages from anywhere
+- 📋 **Activity Log** — Complete audit trail of every workspace action
 
 ---
 
-## Tech Stack
+## 🛠 Tech Stack
 
 | Layer | Technology |
-|-------|-----------|
-| Framework | Next.js 15 (App Router) |
-| Language | TypeScript (strict) |
-| Auth | Better Auth (email + Google OAuth) |
-| Database | Neon PostgreSQL |
-| ORM | Prisma (with indexes on `organizationId`, `createdAt`, `date`) |
-| API | Hono (mounted in Next.js API routes) |
-| Styling | Tailwind CSS (custom design system — shadcn/ui patterns manually implemented) |
-| Email | Nodemailer (SMTP / Gmail App Password) |
-| Testing | Jest (9 unit tests) |
-
-> **Note on UI Library:** The assignment specifies shadcn/ui. This project implements the same component patterns (form validation, table, button states, toast notifications) manually with Tailwind CSS and a custom design system to match the Verio brand identity. All shadcn/ui structural patterns (controlled forms, zod validation, toast feedback) are present.
+|---|---|
+| **Framework** | Next.js 15 (App Router) |
+| **Language** | TypeScript |
+| **Styling** | Tailwind CSS + Custom Material Design 3 tokens |
+| **Authentication** | BetterAuth (session-based + Google OAuth) |
+| **Database** | MongoDB with Prisma ORM |
+| **Email** | Resend / Nodemailer for transactional alerts |
+| **Forms** | React Hook Form + Zod validation |
+| **Typography** | Playfair Display (serif) + Inter (sans-serif) |
+| **Icons** | Material Symbols Outlined |
 
 ---
 
-## Getting Started
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Node.js** ≥ 18
+- **npm** ≥ 9
+- **MongoDB** instance (local or Atlas)
 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/Sanjeev-Chakaravarthy/Verio-Secure-Financial-Extraction-Verification.git
-cd Verio-Secure-Financial-Extraction-Verification
+git clone https://github.com/Sanjeev-Chakaravarthy/LeadDesk-Mini.git
+cd LeadDesk-Mini
 ```
 
 ### 2. Install dependencies
@@ -71,17 +61,35 @@ npm install
 
 ### 3. Configure environment variables
 
-```bash
-cp .env.example .env
+Create a `.env.local` file in the project root:
+
+```env
+# ── Database ──
+DATABASE_URL=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/<db>
+
+# ── Authentication (BetterAuth) ──
+BETTER_AUTH_SECRET=your-secret-key
+BETTER_AUTH_URL=http://localhost:3000
+
+# ── Email (Resend / SMTP) ──
+EMAIL_FROM=noreply@yourdomain.com
+EMAIL_SMTP_HOST=smtp.resend.com
+EMAIL_SMTP_PORT=465
+EMAIL_SMTP_USER=resend
+EMAIL_SMTP_PASS=re_your_api_key
+
+# ── App ──
+APP_URL=http://localhost:3000
+
+# ── Google OAuth (optional) ──
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
 ```
 
-Fill in all values in `.env` (see [Environment Variables](#environment-variables) below).
-
-### 4. Set up the database
+### 4. Generate Prisma client
 
 ```bash
 npx prisma generate
-npx prisma db push
 ```
 
 ### 5. Run the development server
@@ -90,158 +98,123 @@ npx prisma db push
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000) to see the app.
 
 ---
 
-## Environment Variables
+## 📂 Project Structure
 
-Copy `.env.example` to `.env`:
-
-```env
-DATABASE_URL="postgresql://..."          # Neon PostgreSQL connection string
-BETTER_AUTH_SECRET="..."                 # 32+ char random secret (openssl rand -base64 32)
-BETTER_AUTH_URL="http://localhost:3000"  # App base URL
-
-# Google OAuth (optional but recommended)
-GOOGLE_CLIENT_ID="..."
-GOOGLE_CLIENT_SECRET="..."
-
-# Email — SMTP (Gmail App Password)
-EMAIL_FROM="Verio <you@gmail.com>"
-EMAIL_SMTP_HOST="smtp.gmail.com"
-EMAIL_SMTP_PORT="465"
-EMAIL_SMTP_USER="you@gmail.com"
-EMAIL_SMTP_PASS="your-app-password"      # Gmail App Password (not account password)
-
-APP_URL="http://localhost:3000"
 ```
-
----
-
-## Test User Credentials
-
-Two pre-created users for evaluation. Both have separate workspaces — data is fully isolated:
-
-| User | Email | Password | Workspace |
-|------|-------|----------|-----------|
-| User A | `testuser.alpha@verio.demo` | `Verio@2025!` | Alpha Corp |
-| User B | `testuser.beta@verio.demo` | `Verio@2025!` | Beta Labs |
-
-> Register these via the `/register` page or use Google OAuth with any Gmail account.
-
----
-
-## API Endpoints
-
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| `POST` | `/api/register` | Public | Register user + create organisation |
-| `POST` | `/api/auth/sign-in/email` | Public | Better Auth email login |
-| `POST` | `/api/parse` | 🔒 Session | Extract & save transaction |
-| `GET` | `/api/transactions` | 🔒 Session | List transactions (cursor pagination) |
-| `GET` | `/api/workspace/stats` | 🔒 Session | Workspace summary stats |
-| `GET` | `/api/workspace/members` | 🔒 Session | Member list |
-| `POST` | `/api/workspace/invite` | 🔒 Owner | Invite member by email |
-| `GET` | `/api/workspace/activity` | 🔒 Session | Audit log |
-
----
-
-## Sample Texts (All 3 Work)
-
-**Sample 1 — Structured format:**
-```
-Date: 11 Dec 2025
-Description: STARBUCKS COFFEE MUMBAI
-Amount: -420.00
-Balance after transaction: 18,420.50
-```
-
-**Sample 2 — Uber SMS format:**
-```
-Uber Ride * Airport Drop
-12/11/2025 → ₹1,250.00 debited
-Available Balance → ₹17,170.50
-```
-
-**Sample 3 — Messy raw format:**
-```
-txn123 2025-12-10 Amazon.in Order #403-1234567-8901234 ₹2,999.00 Dr Bal 14171.50 Shopping
+LeadDesk-Mini/
+├── prisma/                 # Prisma schema & migrations
+│   └── schema.prisma
+├── public/                 # Static assets
+├── src/
+│   ├── app/                # Next.js App Router pages
+│   │   ├── (auth)/         # Auth-related routes
+│   │   ├── api/            # API routes (leads, workspace, auth)
+│   │   ├── dashboard/      # Agency dashboard
+│   │   ├── leads/          # Lead stream & pipeline (Table + Kanban)
+│   │   ├── analytics/      # Conversion analytics
+│   │   ├── members/        # Team management
+│   │   ├── activity-log/   # Workspace activity log
+│   │   ├── settings/       # Workspace settings
+│   │   ├── profile/        # User profile
+│   │   ├── login/          # Login page
+│   │   ├── register/       # Registration / workspace creation
+│   │   └── page.tsx        # Welcome / landing page
+│   ├── components/         # Shared UI components
+│   │   ├── Brand.tsx       # Logo & branding
+│   │   ├── Navbar.tsx      # Top navigation bar
+│   │   ├── Sidebar.tsx     # Sidebar navigation
+│   │   ├── CommandPalette.tsx  # ⌘K global search
+│   │   └── DigitalHeroesFooter.tsx
+│   ├── utils/              # Utilities & auth client
+│   └── lib/                # Prisma client & helpers
+├── .env.local              # Environment variables (not committed)
+├── tailwind.config.ts      # Tailwind + design token config
+├── next.config.ts          # Next.js configuration
+└── package.json
 ```
 
 ---
 
-## Running Tests
+## 📜 Available Scripts
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm start` | Start production server |
+| `npm run lint` | Run ESLint |
+| `npm test` | Run tests |
+
+---
+
+## 🌐 Pages & Routes
+
+| Route | Description |
+|---|---|
+| `/` | Welcome / landing page (new visitors only) |
+| `/register` | Create workspace or join via invite |
+| `/login` | Sign in with email or Google |
+| `/dashboard` | Agency dashboard with stats & recent leads |
+| `/leads` | Lead stream — Table view + Kanban board |
+| `/leads/[id]` | Individual lead detail page |
+| `/analytics` | Conversion analytics & charts |
+| `/members` | Team management & invitations |
+| `/activity-log` | Workspace activity audit trail |
+| `/settings` | Workspace settings |
+| `/profile` | User profile management |
+| `/help` | Help center |
+
+---
+
+## 🔑 Features in Detail
+
+### Lead Capture API
+
+Submit leads programmatically:
 
 ```bash
-npm test
+POST /api/leads
+Content-Type: application/json
+
+{
+  "name": "Marcus Vance",
+  "email": "marcus@techventures.io",
+  "company": "TechVentures Inc.",
+  "budget": "$10,000 - $25,000",
+  "message": "Looking for a full website redesign.",
+  "source": "Website Contact Form"
+}
 ```
 
-**9 tests across 2 files:**
-- `extraction.test.ts` — Parser unit tests (all 3 sample texts + edge cases)
-- `auth-isolation.test.ts` — IDOR isolation tests (organizationId scoping)
+### Dual-View Pipeline
+
+- **Table View** — Sortable, filterable high-density lead grid
+- **Kanban Board** — Visual cards across *New Inquiries*, *In Conversation*, *Closed & Won*
+- Single-click stage progression buttons on Kanban cards
+
+### Team Workspaces
+
+- Owner can invite members via email or shareable invite link
+- Each workspace is fully isolated — leads, analytics, and settings are scoped per organization
+- Role-based access (Owner / Member)
 
 ---
 
-## Project Structure
+## 📄 License
 
-```
-src/
-├── app/
-│   ├── api/[[...route]]/   # Hono API routes (all protected endpoints)
-│   ├── dashboard/          # Main parse interface
-│   ├── transactions/       # Transaction ledger with cursor pagination
-│   ├── members/            # Workspace members & invites
-│   ├── activity-log/       # Audit log
-│   ├── settings/           # Workspace settings
-│   ├── login/              # Auth pages
-│   ├── register/
-│   ├── forgot-password/
-│   ├── reset-password/
-│   └── complete-setup/     # Google OAuth new-user onboarding
-├── middleware.ts            # Server-side auth guard (cookie check)
-├── components/
-│   ├── Sidebar.tsx
-│   ├── Navbar.tsx
-│   └── Brand.tsx
-└── utils/
-    ├── auth.server.ts      # Better Auth config (VERCEL_PROJECT_PRODUCTION_URL)
-    ├── auth-client.ts      # Client-side auth helpers
-    ├── db.server.ts        # Prisma singleton client
-    ├── email.ts            # Nodemailer email sending
-    └── parser.ts           # Transaction extraction + confidence scoring
-prisma/
-└── schema.prisma           # DB schema (indexes on organizationId, createdAt, date)
-__tests__/
-├── extraction.test.ts      # 7 parser unit tests
-└── auth-isolation.test.ts  # 2 IDOR isolation tests
-```
+This project is proprietary. All rights reserved.
 
 ---
 
-## Security & Isolation Design
+## 👤 Author
 
-- Every API handler calls `auth.api.getSession()` to get the authenticated user
-- The user's `organizationId` is looked up from `Membership` and applied to **all** Prisma queries as a mandatory `where` clause
-- There is no endpoint that accepts an `organizationId` from the client — it is always resolved server-side
-- Prisma indexes on `organizationId` ensure isolated queries are also performant
-- The Next.js middleware checks for the Better Auth session cookie before any page renders
+**Sanjeev M S**  
+📧 [sanjeev.ms28122@gmail.com](mailto:sanjeev.ms28122@gmail.com)
 
 ---
 
-## Deployment
-
-Deployed on **Vercel** with environment variables configured in the dashboard.
-
-1. Set all env vars in Vercel dashboard
-2. Set `BETTER_AUTH_URL` to your production domain
-3. Add production domain to Google OAuth Authorized Redirect URIs:
-   ```
-   https://yourdomain.com/api/auth/callback/google
-   ```
-
----
-
-## License
-
-MIT
+*Built for [Digital Heroes](https://digitalheroesco.com) · Capture. Organize. Convert.*

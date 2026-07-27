@@ -102,11 +102,11 @@ export default function CompleteSetup() {
         <div className="z-10 flex flex-col gap-xl w-full">
           <Brand theme="dark" />
           <div className="w-full max-w-md mt-3xl">
-            <h1 className="font-serif text-display-lg text-white mb-lg text-[48px] leading-[1.1] tracking-tight">
-              One last step to set up your secure ledger.
+            <h1 className="font-serif text-display-lg text-white mb-lg text-[44px] leading-[1.1] tracking-tight font-bold">
+              One last step to set up your agency workspace.
             </h1>
             <p className="font-sans text-body-lg text-zinc-400 leading-relaxed text-[16px]">
-              Verio isolates all transactional data by organization. Enter your team details to initialize your isolated multi-tenant database sandbox.
+              LeadDesk Mini isolates all client inquiries by agency organization. Enter your team details to initialize your lead dashboard.
             </p>
           </div>
         </div>

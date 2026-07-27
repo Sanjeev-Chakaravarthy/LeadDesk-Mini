@@ -71,11 +71,11 @@ export default function ForgotPassword() {
         <div className="z-10 flex flex-col gap-xl w-full">
           <Brand theme="dark" />
           <div className="w-full max-w-md mt-3xl">
-            <h1 className="font-serif text-display-lg text-white mb-lg text-[48px] leading-[1.1] tracking-tight">
-              Simple, secure, and isolated ledger management.
+            <h1 className="font-serif text-display-lg text-white mb-lg text-[44px] leading-[1.1] tracking-tight font-bold">
+              Simple, secure, and isolated agency lead management.
             </h1>
             <p className="font-sans text-body-lg text-zinc-400 leading-relaxed text-[16px]">
-              Access isolation ensures only you can view your system logs and transactional ledgers. Recover your account securely.
+              Access isolation ensures only your agency team can view your client pipeline and inquiry data. Recover your account securely.
             </p>
           </div>
         </div>

@@ -25,7 +25,7 @@ export default function ActivityLog() {
     // Run session check and data fetch in parallel
     Promise.all([
       authClient.getSession(),
-      fetch("/api/workspace/activity").then((r) => r.json()),
+      fetch("/api/workspace/activity").then((r) => (r.ok ? r.json() : { logs: [] })),
     ])
       .then(([sessionRes, data]) => {
         if (!sessionRes.data?.session) {

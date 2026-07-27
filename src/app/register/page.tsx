@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import Brand from "@/components/Brand";
+import DigitalHeroesFooter from "@/components/DigitalHeroesFooter";
 import { toast } from "sonner";
 import { signIn } from "@/utils/auth-client";
 
@@ -134,20 +135,20 @@ function RegisterForm() {
 
           {isInvited ? (
             <>
-              <h1 className="font-serif text-white mb-md leading-snug text-[28px]">
-                You&apos;ve been invited to join a workspace on Verio.
+              <h1 className="font-serif text-white mb-md leading-snug text-[28px] font-bold">
+                You&apos;ve been invited to join an agency workspace on LeadDesk Mini.
               </h1>
               <p className="font-sans text-zinc-400 leading-relaxed text-[15px]">
-                Create your account below or continue with Google. Your membership will be linked automatically once you sign in.
+                Create your account below or continue with Google. Your agency membership will be linked automatically.
               </p>
             </>
           ) : (
             <>
-              <h1 className="font-serif text-white mb-md leading-snug text-[28px]">
-                Extract, verify, and organize financial transactions with organization-level isolation.
+              <h1 className="font-serif text-white mb-md leading-snug text-[28px] font-bold">
+                Capture, organize, and convert every website inquiry from one clean agency dashboard.
               </h1>
               <p className="font-sans text-zinc-400 leading-relaxed text-[15px]">
-                Every workspace is isolated by design — your team&apos;s transaction data stays scoped to your organization only.
+                Every agency workspace is isolated by design — your client pipeline and inquiry data stay scoped to your team only.
               </p>
             </>
           )}
@@ -376,6 +377,11 @@ function RegisterForm() {
               </Link>
             </p>
           </footer>
+
+          {/* ── Digital Heroes Attribution ── */}
+          <div className="mt-xl pt-lg border-t border-outline-variant/30">
+            <DigitalHeroesFooter variant="page" />
+          </div>
         </div>
       </section>
     </main>

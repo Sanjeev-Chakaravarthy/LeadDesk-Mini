@@ -14,10 +14,12 @@ interface WorkspaceInfo {
   membersCount: number;
 }
 
-export default function WorkspaceSettings() {
+export default function AgencySettings() {
   const router = useRouter();
   const [workspace, setWorkspace] = useState<WorkspaceInfo | null>(null);
   const [editName, setEditName] = useState("");
+  const [emailAlerts, setEmailAlerts] = useState(true);
+  const [dailySummary, setDailySummary] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -46,13 +48,13 @@ export default function WorkspaceSettings() {
 
       setWorkspace({
         id: membersRes.members?.[0]?.organizationId || "unknown",
-        name: statsRes.workspaceName || "Unknown Workspace",
+        name: statsRes.workspaceName || "Unknown Agency",
         role: userRole,
         membersCount: statsRes.membersCount || 1,
       });
       setEditName(statsRes.workspaceName || "");
     } catch (err) {
-      console.error("Failed to load workspace settings:", err);
+      console.error("Failed to load agency settings:", err);
       toast.error("Failed to load settings.");
     } finally {
       setLoading(false);
@@ -63,7 +65,6 @@ export default function WorkspaceSettings() {
     fetchWorkspaceSettings();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
-
 
   const handleSaveWorkspaceName = async () => {
     if (!editName.trim() || editName === workspace?.name) return;
@@ -76,11 +77,10 @@ export default function WorkspaceSettings() {
       });
       const result = await res.json();
       if (!res.ok) {
-        throw new Error(result.error || "Failed to update workspace name");
+        throw new Error(result.error || "Failed to update agency name");
       }
-      setWorkspace((prev) => prev ? { ...prev, name: editName.trim() } : prev);
-      toast.success("Workspace name updated successfully. Please refresh or reload.");
-      // Trigger reloading window/sidebar state
+      setWorkspace((prev) => (prev ? { ...prev, name: editName.trim() } : prev));
+      toast.success("Agency workspace updated.");
       window.location.reload();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to save changes.");
@@ -99,33 +99,33 @@ export default function WorkspaceSettings() {
         <Navbar />
 
         <main className="flex-1 px-margin-page py-3xl">
-          <div className="max-w-[720px] mx-auto">
+          <div className="max-w-[760px] mx-auto space-y-2xl">
             {/* Header */}
-            <div className="mb-3xl">
-              <h1 className="font-serif text-[40px] leading-tight text-primary tracking-tight mb-xs">
-                Workspace Settings
+            <div>
+              <h1 className="font-serif text-[36px] md:text-[40px] leading-tight text-primary font-bold mb-xs">
+                Agency Settings
               </h1>
               <p className="font-sans text-[14px] text-on-surface-variant">
-                Configure team workspace attributes and administrative controls.
+                Configure your agency branding, lead notification preferences, and team workspace controls.
               </p>
             </div>
 
             {loading ? (
               <div className="py-xl text-center font-sans text-body-md text-on-surface-variant">
-                Loading workspace settings...
+                Loading agency settings...
               </div>
             ) : (
               <div className="flex flex-col gap-2xl">
-                {/* General Info Card */}
-                <div className="border border-outline-variant bg-white p-xl flex flex-col gap-lg">
+                {/* Agency Name Card */}
+                <div className="hairline-border bg-white p-xl flex flex-col gap-lg">
                   <h2 className="font-sans text-label-sm text-[11px] text-on-surface-variant uppercase tracking-widest font-semibold">
-                    Workspace Attributes
+                    AGENCY BRANDING & NAME
                   </h2>
 
                   <div className="flex flex-col sm:flex-row gap-md items-end">
                     <div className="flex-1 w-full">
                       <label className="block font-sans text-[12px] text-on-surface-variant mb-xs" htmlFor="workspace-name">
-                        Workspace Name
+                        Agency Name
                       </label>
                       <input
                         id="workspace-name"
@@ -133,78 +133,104 @@ export default function WorkspaceSettings() {
                         disabled={!isOwner}
                         value={editName}
                         onChange={(e) => setEditName(e.target.value)}
-                        className="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:outline-none focus:ring-0 py-sm px-0 font-sans text-[14px] text-primary placeholder:text-on-surface-variant/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                        placeholder="Organization name"
+                        className="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:outline-none focus:ring-0 py-sm px-0 font-sans text-[15px] font-semibold text-primary transition-colors disabled:opacity-50"
+                        placeholder="Agency name"
                       />
                     </div>
                     {isOwner && (
                       <button
                         onClick={handleSaveWorkspaceName}
                         disabled={saving || editName === workspace?.name || !editName.trim()}
-                        className="w-full sm:w-auto bg-primary text-on-primary font-sans text-[12px] uppercase tracking-widest py-sm px-xl border border-primary hover:opacity-90 transition-opacity rounded-none disabled:opacity-40 disabled:cursor-not-allowed h-[38px]"
+                        className="w-full sm:w-auto bg-primary text-white font-sans text-[12px] uppercase tracking-widest py-sm px-xl border border-primary hover:opacity-90 transition-opacity rounded-none disabled:opacity-40 h-[38px] font-bold"
                       >
                         {saving ? "Saving..." : "Save"}
                       </button>
                     )}
                   </div>
-
-                  {!isOwner && (
-                    <div className="flex items-start gap-xs text-[11px] text-on-surface-variant opacity-75">
-                      <span className="material-symbols-outlined text-[16px] text-outline mt-[1px]">info</span>
-                      <p className="font-sans">Only workspace Owners can rename this workspace.</p>
-                    </div>
-                  )}
                 </div>
 
-                {/* Technical / Metadata details */}
-                <div className="border border-outline-variant bg-white p-xl">
-                  <h2 className="font-sans text-label-sm text-[11px] text-on-surface-variant uppercase tracking-widest font-semibold mb-lg">
-                    Administrative Metadata
+                {/* Lead Notification Preferences */}
+                <div className="hairline-border bg-white p-xl space-y-lg">
+                  <h2 className="font-sans text-label-sm text-[11px] text-on-surface-variant uppercase tracking-widest font-semibold">
+                    LEAD NOTIFICATION PREFERENCES
+                  </h2>
+
+                  <div className="space-y-md font-sans">
+                    <label className="flex items-center justify-between cursor-pointer p-sm bg-surface-container-low border border-outline-variant">
+                      <div>
+                        <p className="text-[14px] font-bold text-primary">Instant Email Alerts on New Leads</p>
+                        <p className="text-[12px] text-on-surface-variant">Notify team members immediately when a website visitor submits an inquiry.</p>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={emailAlerts}
+                        onChange={(e) => {
+                          setEmailAlerts(e.target.checked);
+                          toast.success("Notification preferences updated.");
+                        }}
+                        className="w-4 h-4 accent-primary cursor-pointer"
+                      />
+                    </label>
+
+                    <label className="flex items-center justify-between cursor-pointer p-sm bg-surface-container-low border border-outline-variant">
+                      <div>
+                        <p className="text-[14px] font-bold text-primary">Daily Pipeline Summary Email</p>
+                        <p className="text-[12px] text-on-surface-variant">Receive a daily breakdown of new, contacted, and closed leads at 8:00 AM.</p>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={dailySummary}
+                        onChange={(e) => {
+                          setDailySummary(e.target.checked);
+                          toast.success("Daily summary preferences updated.");
+                        }}
+                        className="w-4 h-4 accent-primary cursor-pointer"
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                {/* Technical / Metadata Details */}
+                <div className="hairline-border bg-white p-xl space-y-md">
+                  <h2 className="font-sans text-label-sm text-[11px] text-on-surface-variant uppercase tracking-widest font-semibold">
+                    AGENCY WORKSPACE METADATA
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-xl">
                     <div>
-                      <p className="font-sans text-[10px] text-on-surface-variant uppercase tracking-widest mb-xs font-semibold">Workspace ID</p>
+                      <p className="font-sans text-[10px] text-on-surface-variant uppercase tracking-widest mb-xs font-semibold">Agency Workspace ID</p>
                       <p className="font-mono text-[13px] text-primary truncate" title={workspace?.id}>{workspace?.id}</p>
                     </div>
                     <div>
-                      <p className="font-sans text-[10px] text-on-surface-variant uppercase tracking-widest mb-xs font-semibold">Members Registered</p>
-                      <p className="font-mono text-[13px] text-primary">{workspace?.membersCount} Members</p>
+                      <p className="font-sans text-[10px] text-on-surface-variant uppercase tracking-widest mb-xs font-semibold">Active Team Members</p>
+                      <p className="font-mono text-[13px] text-primary font-bold">{workspace?.membersCount} Members</p>
                     </div>
                     <div>
                       <p className="font-sans text-[10px] text-on-surface-variant uppercase tracking-widest mb-xs font-semibold">Your Role</p>
-                      <p className="font-mono text-[13px] text-primary">{workspace?.role}</p>
+                      <p className="font-mono text-[13px] text-primary font-bold">{workspace?.role}</p>
                     </div>
                     <div>
-                      <p className="font-sans text-[10px] text-on-surface-variant uppercase tracking-widest mb-xs font-semibold">Isolation Sandbox</p>
-                      <p className="font-sans text-[13px] text-primary font-semibold text-green-700 flex items-center gap-xs">
-                        <span className="w-1.5 h-1.5 bg-green-600 rounded-full" /> Verified Active
+                      <p className="font-sans text-[10px] text-on-surface-variant uppercase tracking-widest mb-xs font-semibold">Multi-tenant Security</p>
+                      <p className="font-sans text-[13px] text-emerald-800 font-bold flex items-center gap-xs">
+                        <span className="w-2 h-2 bg-emerald-600 rounded-full" /> Verified Isolated
                       </p>
                     </div>
                   </div>
                 </div>
 
-                {/* Danger Zone */}
-                {isOwner && (
-                  <div className="border border-error/30 p-xl bg-error-container/10">
-                    <h2 className="font-sans text-label-sm text-[11px] text-error uppercase tracking-widest font-semibold mb-lg">
-                      Danger Zone
-                    </h2>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-sans text-[14px] text-primary font-semibold">Delete Workspace Sandbox</p>
-                        <p className="font-sans text-[12px] text-on-surface-variant mt-xs max-w-sm leading-normal">
-                          Permanently delete all transaction ledgers and access configurations. This action is irreversible.
-                        </p>
-                      </div>
-                      <button
-                        onClick={() => toast.error("Workspace deletion is administrative restricted. Please contact support.")}
-                        className="flex-shrink-0 ml-xl px-xl py-sm border border-error text-error font-sans text-[12px] uppercase tracking-widest hover:bg-error hover:text-white transition-all rounded-none"
-                      >
-                        Delete
-                      </button>
-                    </div>
+                {/* Team Management Link */}
+                <div className="hairline-border bg-surface-container-low p-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-md">
+                  <div>
+                    <h3 className="font-serif text-[18px] font-bold text-primary">Team Members & Access</h3>
+                    <p className="font-sans text-[13px] text-on-surface-variant">Invite agency teammates to manage leads and pipeline status.</p>
                   </div>
-                )}
+                  <button
+                    onClick={() => router.push("/members")}
+                    className="bg-primary text-white font-sans text-[12px] uppercase tracking-widest px-xl py-sm font-bold"
+                  >
+                    Manage Teammates →
+                  </button>
+                </div>
+
               </div>
             )}
           </div>

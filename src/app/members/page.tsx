@@ -37,9 +37,9 @@ export default function Members() {
     setLoading(true);
 
     Promise.all([
-      fetch("/api/workspace/members").then((r) => r.json()),
-      fetch("/api/workspace/members/pending").then((r) => r.json()),
-      fetch("/api/workspace/stats").then((r) => r.json()),
+      fetch("/api/workspace/members").then((r) => (r.ok ? r.json() : { members: [] })),
+      fetch("/api/workspace/members/pending").then((r) => (r.ok ? r.json() : { invites: [] })),
+      fetch("/api/workspace/stats").then((r) => (r.ok ? r.json() : { workspaceName: "Agency Workspace" })),
     ])
       .then(([membersData, pendingData, statsData]) => {
         if (membersData.members) {
@@ -184,8 +184,8 @@ export default function Members() {
 
             {/* Page Header */}
             <div className="mb-xl md:mb-3xl">
-              <h1 className="font-serif text-display-lg text-[40px] text-primary tracking-tight mb-xs">
-                Members
+              <h1 className="font-serif text-display-lg text-[40px] text-primary tracking-tight mb-xs font-bold">
+                Agency Team
               </h1>
               <p className="font-sans text-body-lg text-[16px] text-on-surface-variant">
                 {workspaceName} — {members.length} Active · {pendingInvites.length} Pending
@@ -194,8 +194,8 @@ export default function Members() {
 
             {/* ── Active Members Table ── */}
             <div className="mb-xs">
-              <p className="font-sans text-label-sm text-[11px] text-on-surface-variant uppercase tracking-widest mb-sm">
-                Active Members
+              <p className="font-sans text-label-sm text-[11px] text-on-surface-variant uppercase tracking-widest mb-sm font-semibold">
+                Active Teammates
               </p>
             </div>
 
@@ -347,13 +347,24 @@ export default function Members() {
 
             {/* ── Invite Section ── */}
             {isOwner && (
-              <div className="mt-2xl md:mt-3xl max-w-md">
-                <h2 className="font-serif text-headline-md text-[20px] text-primary mb-lg">Invite member</h2>
+              <div className="mt-2xl md:mt-3xl max-w-lg bg-surface-container-low border border-outline-variant p-xl space-y-md hairline-border">
+                <div className="flex justify-between items-center">
+                  <h2 className="font-serif text-headline-md text-[20px] font-bold text-primary">Invite Teammates</h2>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(`${window.location.origin}/register`);
+                      toast.success("Shareable agency join link copied to clipboard!");
+                    }}
+                    className="flex items-center gap-xs font-sans text-[11px] font-bold uppercase tracking-wider text-primary border border-outline-variant px-md py-xs bg-white hover:bg-surface-container transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-[14px]">link</span> Copy Shareable Link
+                  </button>
+                </div>
 
                 <form onSubmit={handleInvite} className="flex flex-col sm:flex-row items-end gap-md">
                   <div className="flex-1 w-full relative">
                     <label className="block font-sans text-label-sm text-[12px] text-on-surface-variant mb-[4px]" htmlFor="invite-email">
-                      Email address
+                      Corporate Email Address
                     </label>
                     <input
                       id="invite-email"
@@ -362,18 +373,18 @@ export default function Members() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="colleague@company.com"
-                      className="w-full bg-transparent border-0 border-b border-outline-variant px-0 py-sm font-sans text-body-md text-[14px] text-primary placeholder:text-on-surface-variant/50 focus:outline-none focus:ring-0 focus:border-primary transition-colors rounded-none"
+                      className="w-full bg-white border border-outline-variant px-md py-sm font-sans text-body-md text-[14px] text-primary placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary transition-colors rounded-none"
                     />
                   </div>
                   <button
                     type="submit"
-                    className="w-full sm:w-auto bg-primary text-on-primary font-sans text-label-sm text-[12px] uppercase tracking-widest py-sm px-lg rounded-none hover:opacity-90 transition-opacity flex-shrink-0 border border-primary h-[38px]"
+                    className="w-full sm:w-auto bg-primary text-on-primary font-sans text-label-sm text-[12px] uppercase tracking-widest py-sm px-xl rounded-none hover:opacity-90 transition-opacity flex-shrink-0 border border-primary h-[38px] font-bold"
                   >
-                    Invite
+                    Send Email Invite
                   </button>
                 </form>
-                <p className="font-sans text-body-md text-[12px] text-on-surface-variant mt-sm md:mt-md opacity-70">
-                  They will receive a join link via email. You can cancel the invite at any time above.
+                <p className="font-sans text-body-md text-[12px] text-on-surface-variant opacity-80">
+                  Invited teammates receive an email with a secure join link to enter your agency workspace.
                 </p>
               </div>
             )}

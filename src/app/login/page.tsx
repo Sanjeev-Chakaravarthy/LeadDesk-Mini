@@ -69,7 +69,8 @@ export default function Login() {
       }
       // On success, browser redirects — no need to reset loading
     } catch (err) {
-      const msg = err instanceof Error ? err.message : "Google sign-in failed. Please try again.";
+      const raw = err instanceof Error ? err.message : typeof err === "string" ? err : "";
+      const msg = raw && !raw.includes("[object") ? raw : "Google sign-in failed. Please try again.";
       setError(msg);
       toast.error(msg);
       setGoogleLoading(false);
@@ -88,7 +89,8 @@ export default function Login() {
       });
 
       if (authError) {
-        const msg = authError.message || "Failed to authenticate credentials.";
+        const raw = authError.message || "";
+        const msg = raw && !raw.includes("[object") ? raw : "Failed to authenticate credentials.";
         setError(msg);
         toast.error(msg);
         return;
@@ -97,7 +99,8 @@ export default function Login() {
       toast.success("Signed in — redirecting to dashboard.");
       router.push("/dashboard");
     } catch (err) {
-      const msg = err instanceof Error ? err.message : "Failed to authenticate credentials.";
+      const raw = err instanceof Error ? err.message : typeof err === "string" ? err : "";
+      const msg = raw && !raw.includes("[object") ? raw : "Failed to authenticate credentials.";
       setError(msg);
       toast.error(msg);
     } finally {
@@ -117,11 +120,11 @@ export default function Login() {
         <div className="z-10 flex flex-col gap-xl w-full">
           <Brand theme="dark" />
           <div className="w-full max-w-md mt-3xl">
-            <h1 className="font-serif text-display-lg text-white mb-lg text-[48px] leading-[1.1] tracking-tight">
-              Securely extract and isolate your personal financial data per workspace.
+            <h1 className="font-serif text-display-lg text-white mb-lg text-[44px] leading-[1.1] tracking-tight font-bold">
+              Capture, organize, and convert every website inquiry into your next agency client.
             </h1>
             <p className="font-sans text-body-lg text-on-primary-container leading-relaxed text-[16px] text-zinc-400">
-              Verified, secure, and auditable. Experience a monastic approach to digital ledgers, where architectural precision meets modern security.
+              Verified, secure, and multi-tenant isolated. Experience a modern lead management SaaS built for agencies.
             </p>
           </div>
         </div>

@@ -9,7 +9,7 @@ import { authClient } from "@/utils/auth-client";
 export default function HowItWorks() {
   const router = useRouter();
   const [workspaceName, setWorkspaceName] = useState("Loading...");
-  
+
   useEffect(() => {
     authClient.getSession().then((res) => {
       if (!res.data?.session) {
@@ -28,11 +28,11 @@ export default function HowItWorks() {
   }, [router]);
 
   const steps = [
-    { title: "Sign in", desc: "User authenticates with corporate credentials via Better Auth." },
-    { title: "Session Context", desc: "Backend verifies session token and resolves workspace organization mapping." },
-    { title: "Secure Handshake", desc: "API request carries verified workspace credentials implicitly via session cookies." },
-    { title: "Scoping Enforcement", desc: "Prisma queries run with explicit workspace filters derived only from backend sessions." },
-    { title: "Isolated Ledger", desc: "Financial transaction payload returned securely, preventing IDOR vulnerabilities." },
+    { title: "Website Lead Capture", desc: "Website visitor submits inquiry form on your agency site or via API endpoint." },
+    { title: "Session & Org Verification", desc: "Backend validates cryptographic token and binds incoming lead to your agency workspace." },
+    { title: "Real-time Notification", desc: "LeadDesk Mini alerts team members and streams lead into your active agency dashboard." },
+    { title: "Pipeline Scoping", desc: "Prisma database queries execute with explicit organization scoping, ensuring total data privacy." },
+    { title: "Qualify & Convert", desc: "Teammates update pipeline status (New → Contacted → Closed) and log client contract notes." },
   ];
 
   return (
@@ -47,36 +47,36 @@ export default function HowItWorks() {
           <aside className="col-span-1 md:col-span-3 lg:col-span-4 flex flex-col gap-lg hidden md:flex pt-sm">
             <div className="border-t border-primary pt-sm">
               <h3 className="font-sans text-label-sm text-[10px] text-on-surface-variant uppercase tracking-widest mb-base font-semibold">
-                Organization
+                Agency Workspace
               </h3>
-              <p className="font-mono text-[13px] text-primary">{workspaceName}</p>
+              <p className="font-mono text-[13px] text-primary font-bold">{workspaceName}</p>
             </div>
             <div className="border-t border-outline-variant pt-sm">
               <h3 className="font-sans text-label-sm text-[10px] text-on-surface-variant uppercase tracking-widest mb-base font-semibold">
                 Document Scope
               </h3>
-              <p className="font-mono text-[13px] text-primary">Architecture Overview</p>
+              <p className="font-mono text-[13px] text-primary">Lead Engine Architecture</p>
             </div>
             <div className="border-t border-outline-variant pt-sm">
               <h3 className="font-sans text-label-sm text-[10px] text-on-surface-variant uppercase tracking-widest mb-base font-semibold">
                 Security Perimeter
               </h3>
-              <p className="font-mono text-[13px] text-primary">Workspace Scoping (Better Auth)</p>
+              <p className="font-mono text-[13px] text-primary">Multi-tenant Workspace Scoping</p>
             </div>
           </aside>
 
           {/* Right Content Column */}
           <article className="col-span-1 md:col-span-9 lg:col-span-8 flex flex-col">
-            <h1 className="font-serif text-display-lg text-[40px] leading-tight text-primary mb-xl">
-              How it works — Data Isolation Architecture
+            <h1 className="font-serif text-display-lg text-[40px] leading-tight text-primary mb-xl font-bold">
+              How LeadDesk Mini Works — Lead Stream Architecture
             </h1>
-            
+
             <div className="font-sans text-[16px] text-on-surface-variant leading-relaxed max-w-[65ch] space-y-md mb-2xl">
               <p>
-                Verio employs a strict, perimeter-based approach to data isolation. Every request is verified against the organization encoded in your session token before any ledger data is queried or returned.
+                LeadDesk Mini employs a strict perimeter-based approach to agency lead management and data isolation. Every inquiry is cryptographically scoped to your agency organization before any lead data is stored or queried.
               </p>
               <p>
-                The execution flow below outlines the deterministic lifecycle of an authenticated request. This sequence is invariant; no transaction can bypass the cryptographic verification of the organizational boundary.
+                The execution flow below outlines the deterministic lifecycle of an incoming website inquiry. This sequence ensures no competitor or unauthorized party can access your client pipeline.
               </p>
             </div>
 
@@ -89,7 +89,7 @@ export default function HowItWorks() {
                   {/* Node */}
                   <div className="w-full border border-outline-variant bg-white p-lg hover:bg-surface-container-low transition-colors duration-200">
                     <div className="flex items-center gap-sm">
-                      <span className="font-mono text-[12px] bg-primary text-white w-6 h-6 flex items-center justify-center">
+                      <span className="font-mono text-[12px] bg-primary text-white w-6 h-6 flex items-center justify-center font-bold">
                         0{idx + 1}
                       </span>
                       <span className="font-sans text-[14px] text-primary font-bold uppercase tracking-wider">
@@ -122,7 +122,7 @@ export default function HowItWorks() {
                 Technical Note
               </h4>
               <p className="opacity-80">
-                This scoping is enforced both in the API&apos;s query layer and, where enabled, as a database-level Row Level Security (RLS) policy. Under no circumstances can workspace IDs be submitted or modified via user request bodies.
+                Workspace scoping is enforced at both the API handler and database query layers. Under no circumstances can lead IDs or workspace boundaries be tampered with via user payloads.
               </p>
             </div>
           </article>

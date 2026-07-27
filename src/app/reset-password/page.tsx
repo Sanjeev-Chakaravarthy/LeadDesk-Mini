@@ -210,11 +210,11 @@ export default function ResetPassword() {
         <div className="z-10 flex flex-col gap-xl w-full">
           <Brand theme="dark" />
           <div className="w-full max-w-md mt-3xl">
-            <h1 className="font-serif text-display-lg text-white mb-lg text-[48px] leading-[1.1] tracking-tight">
+            <h1 className="font-serif text-display-lg text-white mb-lg text-[44px] leading-[1.1] tracking-tight font-bold">
               Reset your credentials securely.
             </h1>
             <p className="font-sans text-body-lg text-zinc-400 leading-relaxed text-[16px]">
-              Verio workspaces enforce absolute multi-tenancy. Resetting credentials uses secure, signed tokens to guarantee identity isolation.
+              LeadDesk Mini agency workspaces enforce absolute multi-tenancy. Resetting credentials uses signed tokens to guarantee identity isolation.
             </p>
           </div>
         </div>

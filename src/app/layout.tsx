@@ -24,9 +24,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Verio - Secure Data Extractor",
+  title: "LeadDesk Mini — Capture. Organize. Convert.",
   description:
-    "Workspace-level personal finance transaction extractor with perimeter scoping isolation.",
+    "Modern Lead Management SaaS CRM for agencies. Capture website inquiries and manage client leads from one clean dashboard.",
 };
 
 export default function RootLayout({

@@ -20,15 +20,12 @@ export default function Sidebar({ workspaceName = "Loading..." }: SidebarProps) 
     fetch("/api/workspace/stats")
       .then((res) => {
         if (res.status === 401) {
-          // No workspace yet — try to auto-accept any pending invite first
           fetch("/api/workspace/accept-invite", { method: "POST" })
             .then((r) => r.json())
             .then((d) => {
               if (d.joined) {
-                // Successfully joined a workspace via invite — reload
                 window.location.reload();
               } else {
-                // No invite either — go to complete setup
                 router.push("/complete-setup");
               }
             })
@@ -51,31 +48,33 @@ export default function Sidebar({ workspaceName = "Loading..." }: SidebarProps) 
   };
 
   const navItems = [
-    { name: "Parse", path: "/dashboard", icon: "dashboard_customize" },
-    { name: "Transactions", path: "/transactions", icon: "receipt_long" },
-    { name: "Members", path: "/members", icon: "group" },
-    { name: "Workspace Settings", path: "/settings", icon: "settings" },
+    { name: "Dashboard", path: "/dashboard", icon: "grid_view" },
+    { name: "Leads", path: "/leads", icon: "contacts" },
+    { name: "Analytics", path: "/analytics", icon: "analytics" },
+    { name: "Settings", path: "/settings", icon: "settings" },
     { name: "Activity Log", path: "/activity-log", icon: "history" },
-    { name: "How It Works", path: "/how-it-works", icon: "help" },
+    { name: "How It Works", path: "/how-it-works", icon: "help_outline" },
   ];
 
   return (
     <aside className="hidden md:flex flex-col h-screen w-64 bg-surface-container-low py-lg px-md gap-xs border-r border-outline-variant fixed left-0 top-0 z-50">
       {/* Brand Header */}
       <div className="flex flex-col gap-base mb-xl px-xs">
-        <Brand theme="light" />
-        <div className="mt-md">
+        <Brand theme="light" showTagline={false} />
+        <div className="mt-sm pt-xs border-t border-outline-variant/40">
           <p className="font-sans text-label-sm text-[10px] uppercase tracking-widest text-on-surface-variant opacity-70">
-            Secure Workspace
+            Agency Workspace
           </p>
-          <p className="font-mono text-mono-data text-primary text-[13px]">{activeWorkspace}</p>
+          <p className="font-mono text-mono-data text-primary text-[13px] font-semibold truncate">
+            {activeWorkspace}
+          </p>
         </div>
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 space-y-base">
         {navItems.map((item) => {
-          const isActive = pathname === item.path;
+          const isActive = pathname === item.path || (item.path !== "/dashboard" && pathname.startsWith(item.path));
           return (
             <Link
               key={item.path}
@@ -98,28 +97,23 @@ export default function Sidebar({ workspaceName = "Loading..." }: SidebarProps) 
       {/* Footer Actions */}
       <div className="mt-auto pt-lg border-t border-outline-variant/30 space-y-base">
         <Link
-          href="/help"
-          className="flex items-center gap-md px-sm py-xs text-on-surface-variant hover:bg-surface-container-highest transition-all"
-        >
-          <span className="material-symbols-outlined text-[20px]">help_outline</span>
-          <span className="font-sans text-label-sm text-[12px]">Help Center</span>
-        </Link>
-        <Link
           href="/profile"
-          className="flex items-center gap-md px-sm py-xs text-on-surface-variant hover:bg-surface-container-highest transition-all"
+          className={`flex items-center gap-md px-sm py-xs text-on-surface-variant hover:bg-surface-container-highest transition-all ${
+            pathname === "/profile" ? "bg-secondary-container text-primary font-semibold" : ""
+          }`}
         >
           <span className="material-symbols-outlined text-[20px]">account_circle</span>
-          <span className="font-sans text-label-sm text-[12px]">My Profile</span>
+          <span className="font-sans text-label-sm text-[12px]">Profile</span>
         </Link>
         <button
           onClick={handleLogout}
           className="w-full flex items-center gap-md px-sm py-xs text-on-surface-variant hover:bg-surface-container-highest text-left transition-all"
         >
           <span className="material-symbols-outlined text-[20px]">logout</span>
-          <span className="font-sans text-label-sm text-[12px]">Log out</span>
+          <span className="font-sans text-label-sm text-[12px]">Logout</span>
         </button>
 
-        {/* Digital Heroes Attribution — required for trial */}
+        {/* Digital Heroes Attribution */}
         <DigitalHeroesFooter variant="sidebar" />
       </div>
     </aside>

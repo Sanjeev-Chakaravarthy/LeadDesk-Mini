@@ -183,7 +183,7 @@ export default function ProfilePage() {
                   </h2>
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-sans text-[14px] text-primary font-semibold">Sign out of Verio</p>
+                      <p className="font-sans text-[14px] text-primary font-semibold">Sign out of LeadDesk Mini</p>
                       <p className="font-sans text-[12px] text-on-surface-variant mt-xs">
                         Your session will be immediately invalidated on the server.
                       </p>
