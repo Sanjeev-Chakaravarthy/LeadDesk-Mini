@@ -236,18 +236,8 @@ export default function Navbar({
         </div>
       </header>
 
-      {/* Mobile-only Digital Heroes attribution bar */}
-      <div className="md:hidden border-b border-outline-variant bg-surface-container-low px-margin-page py-sm flex items-center justify-between gap-md flex-wrap">
-        <a
-          href="https://digitalheroesco.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Built for Digital Heroes — opens digitalheroesco.com in a new tab"
-          className="group flex items-center gap-xs bg-primary text-on-primary font-sans text-[10px] font-bold uppercase tracking-widest px-md py-sm transition-all hover:opacity-90 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-        >
-          <span className="material-symbols-outlined text-[12px] group-hover:translate-x-[1px] group-hover:translate-y-[-1px] transition-transform" aria-hidden="true">open_in_new</span>
-          Built for Digital Heroes
-        </a>
+      {/* Mobile-only attribution bar */}
+      <div className="md:hidden border-b border-outline-variant bg-surface-container-low px-margin-page py-sm flex items-center justify-center gap-md flex-wrap">
         <p className="font-sans text-[10px] text-on-surface-variant">
           Created by{" "}
           <span className="font-semibold text-primary">Sanjeev M S</span>
